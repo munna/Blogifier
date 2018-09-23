@@ -14,16 +14,20 @@ namespace App.Pages.Admin.Posts
         public PostItem PostItem { get; set; }
 
         IDataService _db;
+        INotificationService _ns;
 
-        public EditModel(IDataService db)
+        public EditModel(IDataService db, INotificationService ns)
         {
             _db = db;
+            _ns = ns;
         }
 
         public async Task OnGetAsync(int id)
         {
             var author = await _db.Authors.GetItem(a => a.AppUserName == User.Identity.Name);
             IsAdmin = author.IsAdmin;
+
+            Notifications = await _ns.GetNotifications(author.Id);
 
             PostItem = new PostItem { Author = author, Cover = AppSettings.Cover };
 
@@ -39,12 +43,16 @@ namespace App.Pages.Admin.Posts
                 return Page();
             }
 
-            PostItem.Author = await _db.Authors.GetItem(a => a.AppUserName == User.Identity.Name);
+            var user = await _db.Authors.GetItem(a => a.AppUserName == User.Identity.Name);
+            IsAdmin = user.IsAdmin;
 
-            if (ModelState.IsValid)
+            PostItem.Author = await _db.Authors.GetItem(a => a.AppUserName == User.Identity.Name);
+            
+
+            if (ModelState.IsValid )
             {
                 if (PostItem.Id > 0)
-                {
+                { 
                     // post can be updated by admin, so use post author id
                     // instead of identity user name
                     var post = _db.BlogPosts.Single(p => p.Id == PostItem.Id);
@@ -53,23 +61,25 @@ namespace App.Pages.Admin.Posts
                         PostItem.Author = await _db.Authors.GetItem(a => a.Id == post.AuthorId);
                     }
                 }
+                //This is to prevent users from modifiyng other users or admin posts. -- manuta  9-16-2018
+                if (IsAdmin || _db.Authors.Single(a => a.Id == PostItem.Author.Id).AppUserName == User.Identity.Name)
+                {
+                    if (PostItem.Status == SaveStatus.Publishing)
+                        PostItem.Published = DateTime.UtcNow;
 
-                if (PostItem.Status == SaveStatus.Publishing)
-                    PostItem.Published = DateTime.UtcNow;
+                    if (PostItem.Status == SaveStatus.Unpublishing)
+                        PostItem.Published = DateTime.MinValue;
 
-                if (PostItem.Status == SaveStatus.Unpublishing)
-                    PostItem.Published = DateTime.MinValue;
+                    PostItem.Slug = await GetSlug(PostItem.Id, PostItem.Title);
 
-                PostItem.Slug = await GetSlug(PostItem.Id, PostItem.Title);
+                    var item = await _db.BlogPosts.SaveItem(PostItem);
 
-                var item = await _db.BlogPosts.SaveItem(PostItem);
+                    PostItem = item;
+                    Message = Resources.Saved;
 
-                PostItem = item;
-                Message = Resources.Saved;
-
-                return Redirect($"~/Admin/Posts/Edit?id={PostItem.Id}");
+                    return Redirect($"~/Admin/Posts/Edit?id={PostItem.Id}");
+                }
             }
-
             return Page();
         }
 

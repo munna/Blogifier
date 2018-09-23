@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@{
+    IEnumerable<Notification> _notifications = new List<Notification>();
+
+    if (Model.Notifications != null)
+    {
+        _notifications = (IEnumerable<Notification>)Model.Notifications;
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -39,6 +48,14 @@
                     </a>
                 </li>
             }
+            @if (_notifications.Count() > 0)
+            {
+                <li class="taskbar-item">
+                    <a class="taskbar-item-link" href="" onclick="return notificationsController.open();" return false; title="Notifications">
+                        <i class="taskbar-item-icon fas fa-comment"></i>
+                    </a>
+                </li>
+            }
             <li class="taskbar-item ml-auto ml-lg-0 mt-lg-auto">
                 <a class="taskbar-item-link" href="~/" return false; title="Visit Blog" target="_blank"><i class="taskbar-item-icon fas fa-globe"></i></a>
             </li>
@@ -46,6 +63,33 @@
                 <a class="taskbar-item-link" href="#" onclick="document.getElementById('frmOut').submit()" title="Sign out"><i class="taskbar-item-icon fas fa-sign-out-alt"></i></a>
             </li>
         </ul>
+
+        <!-- Modal Notifications -->
+        <div class="modal fade" id="notifications" tabindex="-1" role="dialog" aria-labelledby="notificationsLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="settingsLabel">Notifications</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        @if (_notifications.Count() > 0)
+                        {
+                            foreach (var note in _notifications)
+                            {
+                            <div class="alert alert-primary" role="alert">
+                                @Html.Raw(note.Content)
+                                <button type="button" class="close" onclick="notificationsController.remove('@note.Id')" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <form method="post" id="frmOut" name="frmOut" asp-controller="Account" asp-action="Logout"></form>
 
         @RenderBody()
@@ -56,11 +100,12 @@
     <script src="~/admin/js/lib/bootstrap.min.js"></script>
     <script src="~/admin/js/app/app.js"></script>
     <script src="~/admin/js/app/dataService.js"></script>
+    <script src="~/admin/js/app/notificationsController.js"></script>
     <script>
         var webRoot = '@Url.Content("~/")';
         function getUrl(str) {
             return webRoot + str;
-        };
+        }
     </script>
     @RenderSection("Scripts", false)
 </body>

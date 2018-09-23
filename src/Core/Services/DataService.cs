@@ -7,6 +7,8 @@ namespace Core.Services
     {
         IPostRepository BlogPosts { get; }
         IAuthorRepository Authors { get; }
+        INotificationRepository Notifications { get; }
+        IHtmlWidgetRepository HtmlWidgets { get; }
 
         int Complete();
     }
@@ -21,10 +23,14 @@ namespace Core.Services
 
             BlogPosts = new PostRepository(_db);
             Authors = new AuthorRepository(_db);
+            Notifications = new NotificationRepository(_db);
+            HtmlWidgets = new HtmlWidgetRepository(_db);
         }
 
         public IPostRepository BlogPosts { get; private set; }
         public IAuthorRepository Authors { get; private set; }
+        public INotificationRepository Notifications { get; private set; }
+        public IHtmlWidgetRepository HtmlWidgets { get; private set; }
 
         public int Complete()
         {
