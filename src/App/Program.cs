@@ -22,8 +22,8 @@ namespace App
                 var userMgr = (UserManager<AppUser>)services.GetRequiredService(typeof(UserManager<AppUser>));
                 if (!userMgr.Users.Any())
                 {
-                    userMgr.CreateAsync(new AppUser { UserName = "admin", Email = "admin@us.com" }, "Admin@pass1");
-                    userMgr.CreateAsync(new AppUser { UserName = "demo", Email = "demo@us.com" }, "Demo@pass1");
+                    userMgr.CreateAsync(new AppUser { UserName = "admin", Email = "admin@us.com" }, "Apex@123admin");
+                    userMgr.CreateAsync(new AppUser { UserName = "demo", Email = "demo@us.com" }, "Apex@user1");
                 }
 
                 var context = services.GetRequiredService<AppDbContext>();
@@ -43,6 +43,6 @@ namespace App
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args).UseStartup<Startup>();
+            WebHost.CreateDefaultBuilder(args).UseUrls("http://127.0.0.1:5000").UseStartup<Startup>();
     }
 }

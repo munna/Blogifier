@@ -1,0 +1,23 @@
+download dotnet-sdk-2.1.402-linux-x64.tar.gz
+.Net runtime on linux server setup
+mkdir -p $HOME/dotnet && tar zxf dotnet-sdk-2.1.402-linux-x64.tar.gz -C $HOME/dotnet
+export DOTNET_ROOT=$PATH:$HOME/dotnet 
+export PATH=$PATH:$HOME/dotnet
+
+
+apache 2 
+--enable proxy module
+a2enmod proxy_http
+--enable request module
+sudo a2enmod headers
+--restart apache2
+systemctl restart apache2
+--copy one configuration for another website
+sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/www.google.com.conf
+--enable website
+a2ensite www.google.com
+a2dissite blog.apexpath.com
+a2ensite blog.apexpath.com
+
+https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-2.1&tabs=aspnetcore2x
+https://docs.microsoft.com/en-us/dotnet/core/deploying/#self-contained-deployments-scd
