@@ -76,7 +76,8 @@ namespace App.Pages.Admin.Settings
         {
             var themes = new List<SelectListItem>
             {
-                new SelectListItem { Text = "Simple", Value = "Simple" }
+                new SelectListItem { Text = "Simple", Value = "Simple" },
+                new SelectListItem { Text = "Apex", Value = "apex" }
             };
 
             var storageThemes = _storage.GetThemes();

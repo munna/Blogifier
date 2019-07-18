@@ -1,0 +1,55 @@
+<header class="header">
+
+</header><nav class="navbar navbar-dark bg-dark text-light navbar-expand-lg fixed-top">
+    
+        <div class="search-area">
+          <div class="search-area-inner d-flex align-items-center justify-content-center">
+            <div class="close-btn"><i class="icon-close"></i></div>
+            <div class="row d-flex justify-content-center">
+              <div class="col-md-8">
+                <form  action="~/blog">
+                  <div class="form-group">
+                    <input type="search" id="term" name="term" class="form-control"  placeholder="What are you looking for?">
+                    <button type="submit" class="submit"><i class="icon-search-1"></i></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+    <div class="container">
+        
+         <!-- Navbar Brand -->
+          <div class="navbar-header d-flex align-items-center justify-content-between">
+            <!-- Navbar Brand --><a class="navbar-brand" href="~/">
+            <img src="~/@Core.AppSettings.Logo" alt="@Core.AppSettings.Title" class="my-auto" style="height: 50px" />
+        </a>
+            <!-- Toggle Button-->
+            <button type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span></span><span></span><span></span></button>
+          </div>
+        <div  id="navbarcollapse" class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="~/">
+                        Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                <li class="nav-item">
+                    <a class="nav-link" href="~/admin">Admin</a>
+                </li>
+                }
+                else
+                {
+                <li class="nav-item">
+                    <a class="nav-link" href="~/account/login">Login</a>
+                </li>
+                }
+            </ul>
+              <div class="navbar-text"><a href="#" class="search-btn"><i class="icon-search-1"></i></a></div>
+        </div>
+    </div>
+</nav>
+</header>

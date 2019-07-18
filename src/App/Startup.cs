@@ -34,10 +34,10 @@ namespace App
 
             services.AddAppSettings<AppItem>(section);
 
-            AppSettings.DbOptions = options => options.UseSqlite(section.GetValue<string>("ConnString"));
-
+            AppSettings.DbOptions = options => options.UseNpgsql(section.GetValue<string>("ConnString"));
+        
             services.AddDbContext<AppDbContext>(AppSettings.DbOptions);
-
+            
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();

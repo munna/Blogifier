@@ -1,0 +1,10 @@
+/* your styles go here */
+.navbar{
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+pre{
+    background-color: black;
+    color:#fff;
+    padding:5px;
+}

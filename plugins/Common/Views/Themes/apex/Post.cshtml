@@ -1,0 +1,55 @@
+@model PostModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <partial name="~/Views/Themes/apex/Shared/_Header.cshtml" />
+</head>
+<body>
+    <style>
+        .post img {
+            max-width: 100%;
+        }
+    </style>
+    <partial name="~/Views/Themes/apex/Shared/_Navbar.cshtml" />
+    <div class="container" style="margin-top:75px;">
+        <div class="row">
+            <div class="post blog-post col-lg-12">
+                <div class="post-single">
+                    <!-- <div class="post-thumbnail"><img src="@ViewBag.Cover" alt="@Model.Post.Title" class="img-fluid"></div> -->
+              <div class="post-details">
+                
+                <h1>@Model.Post.Title<a href="#"><i class="fa fa-bookmark-o"></i></a></h1>
+                <div class="post-footer d-flex align-items-center flex-column flex-sm-row">
+                    <a class="author d-flex align-items-center flex-wrap" href="~/authors/@Model.Post.Author.AppUserName">
+                    <div class="avatar">
+                        <img class="post-meta-img img-fluid" src="~/@Model.Post.Author.Avatar" alt="@Model.Post.Author.DisplayName" />
+                    </div>
+                    <div class="title"><span>@Model.Post.Author.DisplayName</span></div></a>
+                    
+                  <div class="d-flex align-items-center flex-wrap">       
+                    <div class="date"><i class="icon-clock"></i> @Model.Post.Published.ToString("M"), @Model.Post.Published.Year</div>
+                  <div class="category">
+                      @if (!string.IsNullOrEmpty(@Model.Post.Categories))
+                        {
+                            var cats = @Model.Post.Categories.Split(',');
+                            foreach (var cat in cats)
+                            {
+                                    <a href="~/categories/@cat">@cat</a>
+                              }
+                        }
+                  </div>
+                
+                  </div>
+                </div>
+                <div class="post-body">
+                    @Html.Raw(Model.Post.Content)
+                </div>
+               </div>
+            </div>
+            </div>
+            
+        </div>
+    </div>
+    <partial name="~/Views/Themes/apex/Shared/_Footer.cshtml" />
+</body>
+</html>
